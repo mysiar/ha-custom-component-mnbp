@@ -18,6 +18,16 @@ sensor:
 ## Instalation
 ### 📦 Manual Installation
 
+To install this integration manually, you need to download [**mnbp.zip**](https://github.com/mysiar/ha-custom-component-mnbp/releases/latest/download/mnbp.zip) and extract its contents to the `config/custom_components/mnbp` directory.
+
+
+```bash
+mkdir -p custom_components/mnbp
+cd custom_components/mnbp
+wget https://github.com/mysiar/ha-custom-component-mnbp/releases/latest/download/mnbp.zip
+unzip mnbp.zip
+rm mnbp.zip
+
 ## Display data (markdown-card)
 ### exchange_today
 
