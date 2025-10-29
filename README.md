@@ -1,10 +1,10 @@
 # Home Assistant custom component NBP
 
 Provides
- - NBP exchange rates for today (table C) *
- - NBP gold price for today *
+ - NBP exchange rates for today (table C) `*`
+ - NBP gold price for today `*`
 
-* - requires manual update via automation to fetch the latest data from NBP API.
+`*` - requires manual update via automation to fetch the latest data from NBP API.
 
 ## Sensor configuration
 
