@@ -1,8 +1,10 @@
 # Home Assistant custom component NBP
 
 Provides
- - NBP exchange rates for today (table C)
- - NBP gold price for today
+ - NBP exchange rates for today (table C) *
+ - NBP gold price for today *
+
+* - requires manual update via automation to fetch the latest data from NBP API.
 
 ## Sensor configuration
 
@@ -13,6 +15,34 @@ sensor:
 
   - platform: mnbp
     type: gold_today
+```
+
+## Automations
+
+```yaml
+- id: 'f2b0c78b-25b9-4ec2-9e9c-aa258cc8a4a1'
+  alias: Update NBP Exchange Sensor Daily at 08:30
+  description: Trigger manual update of NBP exchange rate sensor
+  trigger:
+    - platform: time
+      at: "08:30:00"
+  action:
+    - service: homeassistant.update_entity
+      target:
+        entity_id: sensor.nbp_exchange_rate_today
+  mode: single
+
+- id: 'f2b0c78b-25b9-4ec2-9e9c-aa258cc8a4a2'
+  alias: Update NBP Gold Sensor Daily at 08:30
+  description: Trigger manual update of NBP gold price sensor
+  trigger:
+    - platform: time
+      at: "08:30:00"
+  action:
+    - service: homeassistant.update_entity
+      target:
+        entity_id: sensor.nbp_gold_price_today
+  mode: single
 ```
 
 ## Instalation

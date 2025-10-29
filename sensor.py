@@ -9,8 +9,6 @@ from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 _LOGGER = logging.getLogger(__name__)
 
-EXCHANGE_TODAY_INTERVAL = 600
-GOLD_TODAY_INTERVAL = 600
 
 def setup_platform(
     hass: HomeAssistant,
@@ -36,10 +34,10 @@ def setup_platform(
 class BaseNBPSensor(SensorEntity):
     """Base NBP sensor class."""
 
-    def __init__(self, name: str, interval: int) -> None:
+    def __init__(self, name: str) -> None:
         self._attr_name = name
-        self._attr_scan_interval = timedelta(seconds=interval)
         self._last_update: str | None = None
+        self._attr_should_poll = False
 
     @property
     def extra_state_attributes(self) -> dict:
@@ -62,13 +60,16 @@ class MNBPExchangeSensorToday(BaseNBPSensor):
     def __init__(self) -> None:
         self._attr_unique_id = "nbp_exchange_today"
         self._rates = []
-        super().__init__("NBP Exchange Rates Today", EXCHANGE_TODAY_INTERVAL)
+        self._trading_date: str | None = None
+        self._effective_date: str | None = None
+        super().__init__("NBP Exchange Rates Today")
 
     @property
     def extra_state_attributes(self) -> dict:
         return {
             "last_update": self._last_update,
             "rates": self._rates,
+            "trading_date": self._trading_date,
         }
 
     def update(self) -> None:
@@ -79,10 +80,12 @@ class MNBPExchangeSensorToday(BaseNBPSensor):
             payload = response.json()
             self._rates = payload[0].get("rates", [])
             usd = next((r for r in self._rates if r["code"] == "USD"), None)
-            self._attr_native_value = usd["bid"] if usd else None            
+            self._attr_native_value = usd["bid"] if usd else None
+            self._trading_date = payload[0].get("tradingDate")
+            self._effective_date = payload[0].get("effectiveDate")         
             super().update()
         except Exception as e:
-            _LOGGER.error("Failed to fetch NBP data for today gold price !")
+            _LOGGER.error("Failed to fetch NBP data for today exchange rates !")
             self._attr_native_value = "Error"
             self.self._attr_native_value = None
 
@@ -96,7 +99,7 @@ class MNBPGoldSensorToday(BaseNBPSensor):
 
     def __init__(self) -> None:
         self._attr_unique_id = "nbp_gold_today"
-        super().__init__("NBP Gold Price Today", GOLD_TODAY_INTERVAL)
+        super().__init__("NBP Gold Price Today")
 
     def update(self) -> None:
         url = "https://api.nbp.pl/api/cenyzlota/today"
