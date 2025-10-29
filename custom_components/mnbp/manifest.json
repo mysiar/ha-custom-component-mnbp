@@ -1,0 +1,11 @@
+{
+  "domain": "mnbp",
+  "name": "mNBP",
+  "codeowners": ["@mysiar"],
+  "dependencies": [],
+  "documentation": "https://github.com/mysiar/ha-custom-component-mnbp",
+  "issue_tracker": "https://github.com/mysiar/ha-custom-component-mnbp/issues",  
+  "requirements": ["requests", "urllib3"],
+  "version": "v1.0.0",
+  "iot_class": "cloud_polling"
+}
